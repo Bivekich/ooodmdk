@@ -8,6 +8,12 @@ export default {
         nevduplenysh: ['Nevduplenysh', 'sans-serif'],
       },
     },
+    screens: {
+      sm: '480px',
+      md: '768px',
+      lg: '1028px',
+      xl: '1440px'
+    }
   },
   plugins: [],
 };
