@@ -1,16 +1,16 @@
 export default {
   name: 'product',
-  title: 'Product',
+  title: 'Продукт',
   type: 'document',
   fields: [
     {
       name: 'title',
-      title: 'Title',
+      title: 'Название',
       type: 'string',
     },
     {
       name: 'slug',
-      title: 'Slug',
+      title: 'Слаг',
       type: 'slug',
       options: {
         source: 'title',
@@ -19,12 +19,12 @@ export default {
     },
     {
       name: 'description',
-      title: 'Description',
+      title: 'Описание',
       type: 'text',
     },
     {
       name: 'image',
-      title: 'Image',
+      title: 'Изображение',
       type: 'image',
       options: {
         hotspot: true,
@@ -32,13 +32,13 @@ export default {
     },
     {
       name: 'category',
-      title: 'Category',
+      title: 'Категория',
       type: 'reference',
       to: {type: 'category'},
     },
     {
       name: 'items',
-      title: 'Items',
+      title: 'Итемы',
       type: 'array',
       of: [{type: 'string'}],
     },
