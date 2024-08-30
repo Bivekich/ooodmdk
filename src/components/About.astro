@@ -1,3 +1,14 @@
+---
+import { sanityClient } from "sanity:client";
+import { PortableText } from "@portabletext/react";
+
+const about = await sanityClient.fetch(`*[_type == "about"][0]{
+  title,
+  description,
+  "imageUrl": image.asset->url
+}`);
+---
+
 <section
   id="about"
   class="bg-white text-black py-16 px-8 lg:px-24 flex flex-col lg:flex-row items-center justify-between"
@@ -7,32 +18,15 @@
     <h2
       class="text-9xl lg:text-10xl font-bold text-yellow-500 mb-8 font-nevduplenysh"
     >
-      О НАС
+      {about.title}
     </h2>
-    <p class="text-base lg:text-lg text-gray-800 leading-relaxed">
-      Наша компания занимается производством восьми драгоценных металлов на
-      аффинажных предприятиях России. Мы перерабатываем вторичное сырье и
-      выпускаем продукцию с содержанием основного компонента до 99,99%.
-    </p>
-    <p class="text-base lg:text-lg text-gray-800 leading-relaxed mt-4">
-      Мы производим драгоценные металлы в виде слитков, гранул, проволок, лент,
-      полос, порошков, химических соединений, а также ювелирных и технических
-      изделий. Вся продукция имеет УИН, сертификаты и паспорта качества
-      завода-изготовителя.
-    </p>
-    <p class="text-base lg:text-lg text-gray-800 leading-relaxed mt-4">
-      Контроль качества осуществляется ОТК и/или РТ- Техприемка (Военная
-      приемка). Транспортировку осуществляют только ФГУП ГЦСС (СпецСвязь) и
-      СФИНКС. Мы работаем по прямым контрактам, ИГК, 275ФЗ, ГОЗ и другим.
-    </p>
-    <p class="text-base lg:text-lg text-gray-800 leading-relaxed mt-4">
-      Мы аккредитованы на всех государственных и коммерческих ЭТП и принимаем
-      участие в торгах, тендерах, аукционах и других процедурах.
-    </p>
+    <div class="text-base lg:text-lg text-gray-800 leading-relaxed">
+      <PortableText value={about.description} />
+    </div>
   </div>
 
   <!-- Правая часть: изображение -->
   <div class="lg:w-1/2 flex justify-center lg:justify-end">
-    <img src="/images/about.png" alt="О нас" class="w-full lg:w-3/4" />
+    <img src={about.imageUrl} alt="О нас" class="w-full lg:w-3/4" />
   </div>
 </section>
