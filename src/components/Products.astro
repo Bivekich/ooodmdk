@@ -1,7 +1,8 @@
 ---
 import { sanityClient } from "sanity:client";
 
-const categories = await sanityClient.fetch(`*[_type == "category"]{
+const categories =
+  await sanityClient.fetch(`*[_type == "category"] | order(order asc){
   title,
   slug,
   color,
@@ -100,7 +101,6 @@ const categories = await sanityClient.fetch(`*[_type == "category"]{
       }
     };
 
-    // Привязываем обработчики событий ко всем кнопкам после загрузки страницы
     const buttons = document.querySelectorAll("[onclick^='toggleDropdown']");
     buttons.forEach((button) => {
       button.onclick = function () {
@@ -112,7 +112,6 @@ const categories = await sanityClient.fetch(`*[_type == "category"]{
 </script>
 
 <style>
-  /* Для анимации стрелки */
   svg {
     transition: transform 0.3s ease;
   }
