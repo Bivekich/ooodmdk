@@ -1,18 +1,18 @@
 @font-face {
-  font-family: 'Gilroy';
-  src: url('/fonts/Gilroy-Bold.ttf') format('truetype');
+  font-family: "Gilroy";
+  src: url("/fonts/Gilroy-Bold.ttf") format("truetype");
   font-weight: bold;
 }
 
 @font-face {
-  font-family: 'Gilroy';
-  src: url('/fonts/Gilroy-Medium.ttf') format('truetype');
+  font-family: "Gilroy";
+  src: url("/fonts/Gilroy-Medium.ttf") format("truetype");
   font-weight: 500;
 }
 
 @font-face {
-  font-family: 'Nevduplenysh';
-  src: url('/fonts/Nevduplenysh.otf') format('opentype');
+  font-family: "Nevduplenysh";
+  src: url("/fonts/Nevduplenysh.otf") format("opentype");
   font-weight: normal;
   font-style: normal;
 }

@@ -1,0 +1,119 @@
+---
+import { sanityClient } from "sanity:client";
+
+const categories = await sanityClient.fetch(`*[_type == "category"]{
+  title,
+  slug,
+  color,
+  element,
+  elementNumber,
+  "products": *[_type == "product" && references(^._id)]{
+    title,
+    slug,
+    description,
+    "imageUrl": image.asset->url,
+    items
+  }
+}`);
+---
+
+<section id="products" class="bg-white text-black py-16 px-8 lg:px-24">
+  <h2
+    class="text-center text-7xl lg:text-9xl font-bold text-yellow-500 mb-12 font-nevduplenysh"
+  >
+    ПРОДУКЦИЯ
+  </h2>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    {
+      categories.map((category) => (
+        <div
+          class="relative p-8 rounded-[2rem] shadow-lg"
+          style={`background-color: ${category.color};`}
+        >
+          <div
+            class="absolute top-0 right-0 transform translate-x-1/4 -translate-y-1/4 text-white w-14 h-14 flex flex-col items-center justify-center rounded-full text-xl font-bold"
+            style={`background-color: ${category.color};`}
+          >
+            <span>{category.element}</span>
+            <span class="text-xs font-normal">{category.elementNumber}</span>
+          </div>
+          <h3 class="text-4xl font-semibold mb-4 text-white font-nevduplenysh">
+            {category.title.toUpperCase()}
+          </h3>
+
+          <button
+            class="cursor-pointer w-full text-xl font-semibold py-2 px-4 rounded-lg bg-white transition flex items-center justify-center hover:bg-opacity-90 hover:text-white"
+            style={`color: ${category.color}; border: 2px solid ${category.color};`}
+            onclick={`toggleDropdown('${category.slug.current}')`}
+          >
+            Показать товары
+            <svg
+              id={`arrow-${category.slug.current}`}
+              class="ml-2 w-5 h-5 transform transition-transform"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </button>
+
+          <div id={`dropdown-${category.slug.current}`} class="mt-4 hidden">
+            <ul class="text-lg list-disc list-inside text-white">
+              {category.products.map((product) => (
+                <li>
+                  <a
+                    href={`/${product.slug.current}`}
+                    class="hover:text-yellow-500 transition"
+                  >
+                    {product.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const toggleDropdown = (categorySlug) => {
+      const dropdown = document.getElementById(`dropdown-${categorySlug}`);
+      const arrow = document.getElementById(`arrow-${categorySlug}`);
+
+      if (dropdown.classList.contains("hidden")) {
+        dropdown.classList.remove("hidden");
+        arrow.style.transform = "rotate(180deg)";
+      } else {
+        dropdown.classList.add("hidden");
+        arrow.style.transform = "rotate(0deg)";
+      }
+    };
+
+    // Привязываем обработчики событий ко всем кнопкам после загрузки страницы
+    const buttons = document.querySelectorAll("[onclick^='toggleDropdown']");
+    buttons.forEach((button) => {
+      button.onclick = function () {
+        const categorySlug = this.getAttribute("onclick").match(/'([^']+)'/)[1];
+        toggleDropdown(categorySlug);
+      };
+    });
+  });
+</script>
+
+<style>
+  /* Для анимации стрелки */
+  svg {
+    transition: transform 0.3s ease;
+  }
+</style>
