@@ -5,7 +5,7 @@ import { PortableText } from "@portabletext/react";
 const about = await sanityClient.fetch(`*[_type == "about"][0]{
   title,
   description,
-  "imageUrl": image.asset->url
+  "imageUrls": images[].asset->url
 }`);
 ---
 
@@ -20,13 +20,22 @@ const about = await sanityClient.fetch(`*[_type == "about"][0]{
     >
       {about.title}
     </h2>
-    <div class="text-base lg:text-lg text-gray-800 leading-relaxed">
+    <div class="text-base lg:text-lg text-gray-800 leading-relaxed portable-text">
       <PortableText value={about.description} />
     </div>
   </div>
 
-  <!-- Правая часть: изображение -->
-  <div class="lg:w-1/2 flex justify-center lg:justify-end">
-    <img src={about.imageUrl} alt="О нас" class="w-full lg:w-3/4" />
+  <!-- Правая часть: коллаж из изображений -->
+  <div class="lg:w-1/2 grid grid-cols-2 gap-4">
+    {about.imageUrls.map((imageUrl) => (
+      <img src={imageUrl} alt="О нас" class="w-full h-full object-cover rounded-lg shadow-lg" />
+    ))}
   </div>
 </section>
+
+<style>
+  .portable-text p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+</style>
