@@ -23,14 +23,18 @@ export default {
       type: 'string',
     },
     {
-      name: 'element',
-      title: 'Обозначение элемента',
-      type: 'string',
-    },
-    {
-      name: 'elementNumber',
-      title: 'Номер элемента',
-      type: 'number',
+      name: 'elements',
+      title: 'Элементы',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {name: 'element', title: 'Обозначение элемента', type: 'string'},
+            {name: 'elementNumber', title: 'Номер элемента', type: 'number'},
+          ],
+        },
+      ],
     },
     {
       name: 'order',

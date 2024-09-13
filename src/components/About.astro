@@ -1,10 +1,16 @@
 ---
 import { sanityClient } from "sanity:client";
-import { PortableText } from "@portabletext/react";
 
 const about = await sanityClient.fetch(`*[_type == "about"][0]{
   title,
-  description,
+  paragraph1,
+  paragraph2,
+  paragraph3,
+  paragraph4,
+  paragraph5,
+  paragraph6,
+  paragraph7,
+  paragraph8,
   "imageUrls": images[].asset->url
 }`);
 ---
@@ -20,22 +26,40 @@ const about = await sanityClient.fetch(`*[_type == "about"][0]{
     >
       {about.title}
     </h2>
-    <div class="text-base lg:text-lg text-gray-800 leading-relaxed portable-text">
-      <PortableText value={about.description} />
+    <div class="text-base lg:text-lg text-gray-800 leading-relaxed">
+      <p>{about.paragraph1}</p>
+      <p>{about.paragraph2}</p>
+      <p>{about.paragraph3}</p>
+      <p>{about.paragraph4}</p>
+      <p>{about.paragraph5}</p>
+      <p>{about.paragraph6}</p>
+      <p>{about.paragraph7}</p>
+      <p>{about.paragraph8}</p>
     </div>
   </div>
 
   <!-- Правая часть: коллаж из изображений -->
   <div class="lg:w-1/2 grid grid-cols-2 gap-4">
-    {about.imageUrls.map((imageUrl) => (
-      <img src={imageUrl} alt="О нас" class="w-full h-full object-cover rounded-lg shadow-lg" />
-    ))}
+    {
+      about.imageUrls.map((imageUrl, index) => (
+        <img
+          src={imageUrl}
+          alt={`О нас изображение ${index + 1}`}
+          class="w-full h-full object-contain rounded-lg shadow-lg"
+        />
+      ))
+    }
   </div>
 </section>
 
 <style>
-  .portable-text p {
+  p {
     margin-bottom: 1rem;
     line-height: 1.6;
+  }
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
   }
 </style>

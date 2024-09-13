@@ -1,13 +1,16 @@
 ---
 import { sanityClient } from "sanity:client";
 
-const categories = await sanityClient.fetch(`*[_type == "category"] | order(order asc){
+const categories =
+  await sanityClient.fetch(`*[_type == "category"] | order(order asc){
   title,
   slug,
   color,
-  element,
-  elementNumber,
-  "products": *[_type == "product" && references(^._id)]{
+  elements[] {
+    element,
+    elementNumber
+  },
+  "products": *[_type == "product" && references(^._id)] | order(_createdAt desc){
     title,
     slug,
     description,
@@ -25,61 +28,71 @@ const categories = await sanityClient.fetch(`*[_type == "category"] | order(orde
   </h2>
 
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-    {categories.map((category, index) => (
-      <div
-        class={`relative p-8 rounded-[2rem] shadow-lg ${index === categories.length - 1 ? 'lg:col-span-3' : ''}`}
-        style={`background-color: ${category.color};`}
-      >
+    {
+      categories.map((category, index) => (
         <div
-          class="absolute top-0 right-0 transform translate-x-1/4 -translate-y-1/4 text-white w-14 h-14 flex flex-col items-center justify-center rounded-full text-xl font-bold"
-          style={`background-color: ${category.color};`}
+          class={`relative p-8 rounded-[2rem] shadow-lg ${
+            index === categories.length - 1 ? "lg:col-span-3" : ""
+          }`}
+          style={`background-color: ${category.color}; min-height: ${
+            200 + category.elements.length * 20
+          }px;`}
         >
-          <span>{category.element}</span>
-          <span class="text-xs font-normal">{category.elementNumber}</span>
-        </div>
-        <h3 class="text-4xl font-semibold mb-4 text-white font-nevduplenysh">
-          {category.title.toUpperCase()}
-        </h3>
-
-        <button
-          class="cursor-pointer w-full text-xl font-semibold py-2 px-4 rounded-lg bg-white transition flex items-center justify-center hover:bg-opacity-90 hover:text-white"
-          style={`color: ${category.color}; border: 2px solid ${category.color};`}
-          onclick={`toggleDropdown('${category.slug.current}')`}
-        >
-          Показать товары
-          <svg
-            id={`arrow-${category.slug.current}`}
-            class="ml-2 w-5 h-5 transform transition-transform"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </button>
-
-        <div id={`dropdown-${category.slug.current}`} class="mt-4 hidden">
-          <ul class="text-lg list-disc list-inside text-white">
-            {category.products.map((product) => (
-              <li>
-                <a
-                  href={`/${product.slug.current}`}
-                  class="hover:text-yellow-500 transition"
-                >
-                  {product.title}
-                </a>
-              </li>
+          <div class="absolute top-0 right-0 flex flex-wrap space-y-2">
+            {category.elements.map((element, idx) => (
+              <div
+                class="m-1 transform text-white w-14 h-14 flex flex-col items-center justify-center rounded-full text-xl font-bold"
+                style={`background-color: ${category.color};`}
+              >
+                <span>{element.element}</span>
+                <span class="text-xs font-normal">{element.elementNumber}</span>
+              </div>
             ))}
-          </ul>
+          </div>
+          <h3 class="text-4xl font-semibold mb-4 text-white font-nevduplenysh">
+            {category.title.toUpperCase()}
+          </h3>
+
+          <button
+            class="cursor-pointer w-full text-xl font-semibold py-2 px-4 rounded-lg bg-white transition flex items-center justify-center hover:bg-opacity-90 hover:text-white"
+            style={`color: ${category.color}; border: 2px solid ${category.color};`}
+            onclick={`toggleDropdown('${category.slug.current}')`}
+          >
+            Показать товары
+            <svg
+              id={`arrow-${category.slug.current}`}
+              class="ml-2 w-5 h-5 transform transition-transform"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </button>
+
+          <div id={`dropdown-${category.slug.current}`} class="mt-4 hidden">
+            <ul class="text-lg list-disc list-inside text-white">
+              {category.products.map((product) => (
+                <li>
+                  <a
+                    href={`/${product.slug.current}`}
+                    class="hover:text-yellow-500 transition"
+                  >
+                    {product.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-      </div>
-    ))}
+      ))
+    }
   </div>
 </section>
 
