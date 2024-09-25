@@ -18,6 +18,12 @@ export default {
       },
     },
     {
+      name: 'descriptions',
+      title: 'Описание',
+      type: 'array',
+      of: [{type: 'string'}],
+    },
+    {
       name: 'description',
       title: 'Описание',
       type: 'text',

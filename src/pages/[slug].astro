@@ -7,7 +7,7 @@ const { slug } = Astro.params;
 const product = await sanityClient.fetch(
   `*[_type == "product" && slug.current == $slug][0]{
   title,
-  description,
+  descriptions,
   "imageUrl": image.asset->url,
   items
 }`,
@@ -26,9 +26,11 @@ const product = await sanityClient.fetch(
     <div class="flex flex-col lg:flex-row gap-12">
       <!-- Описание товара слева -->
       <div class="lg:w-1/2">
-        <p class="text-xl leading-relaxed mb-8">
-          {product.description}
-        </p>
+        {
+          product.descriptions.map((paragraph) => (
+            <p class="text-xl leading-relaxed mb-8">{paragraph}</p>
+          ))
+        }
       </div>
 
       <!-- Изображение товара справа -->
@@ -40,7 +42,7 @@ const product = await sanityClient.fetch(
         />
         <!-- Подпись и итемы под картинкой -->
         <div class="mt-4">
-          <h3 class="text-xl mb-2">Аббревиатуры:</h3>
+          <h3 class="text-xl mb-2">Тип, размер, марка:</h3>
           <div class="flex flex-wrap gap-2 text-lg font-bold">
             {product.items.map((item) => <span>{item}</span>)}
           </div>
